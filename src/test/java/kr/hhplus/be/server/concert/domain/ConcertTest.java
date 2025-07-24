@@ -58,7 +58,7 @@ class ConcertTest {
     void concertChangeStatus() {
         // given
         // when
-         concert.setConcertStatus(ConcertStatus.CANCELLED);
+         concert.changeStatus(ConcertStatus.CANCELLED);
         // then
         assertEquals(concert.getConcertStatus(),ConcertStatus.CANCELLED);
     }

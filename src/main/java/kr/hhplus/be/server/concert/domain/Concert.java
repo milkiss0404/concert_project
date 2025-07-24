@@ -1,14 +1,11 @@
 package kr.hhplus.be.server.concert.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
 public class Concert {
     private Long id;
     private String concertTitle;
