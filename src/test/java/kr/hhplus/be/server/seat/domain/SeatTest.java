@@ -17,7 +17,7 @@ class SeatTest {
         seat = Seat.builder()
                 .id(1L)
                 .zone(Zone.VIP)
-                .row("2열")
+                .seatRow("2열")
                 .seatNumber(20)
                 .reservationStatus(ReservationStatus.RESERVED).build();
     }

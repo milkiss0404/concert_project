@@ -9,7 +9,7 @@ import lombok.*;
 public class Seat {
     private Long id;
     private Zone zone;
-    private String row;
+    private String seatRow;
     private int seatNumber;
     private ReservationStatus reservationStatus = ReservationStatus.AVAILABLE;
 
