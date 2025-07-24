@@ -42,13 +42,13 @@ class SeatTest {
         assertEquals(Zone.S, seat.getZone());
     }
     @Test
-    @DisplayName("좌석 예약 상태 바꾸기")
+    @DisplayName("좌석 예약 상태 취소로 바꾸기")
     void changeSeatGrade () {
         // given
         // when
-        seat.changeStatus(ReservationStatus.AVAILABLE);
+        seat.cancelStatus();
         // then
-        assertEquals(ReservationStatus.AVAILABLE,seat.getReservationStatus());
+        assertEquals(ReservationStatus.CANCELLED,seat.getReservationStatus());
     }
 
 }

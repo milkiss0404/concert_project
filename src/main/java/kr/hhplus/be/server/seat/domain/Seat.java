@@ -11,7 +11,7 @@ public class Seat {
     private Zone zone;
     private String row;
     private int seatNumber;
-    private ReservationStatus reservationStatus;
+    private ReservationStatus reservationStatus = ReservationStatus.AVAILABLE;
 
     public int getSeatPrice() {
         return zone.getPrice();
@@ -20,7 +20,7 @@ public class Seat {
         this.zone = zone;
     }
 
-    public void changeStatus(ReservationStatus reservationStatus) {
-        this.reservationStatus = reservationStatus;
+    public void cancelStatus() {
+        this.reservationStatus = ReservationStatus.CANCELLED;
     }
 }

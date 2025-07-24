@@ -11,7 +11,7 @@ public class Concert {
     private String concertTitle;
     private ConcertSchedule concertSchedule;
     private String artist;
-    private ConcertStatus concertStatus;
+    private ConcertStatus concertStatus = ConcertStatus.SCHEDULED;
     private String desc;
 
     public String getConcertDate() {
@@ -20,7 +20,13 @@ public class Concert {
     public String getConcertTime() {
         return concertSchedule.getConcertTime();
     }
-    public void changeStatus(ConcertStatus concertStatus) {
-        this.concertStatus = concertStatus;
+    public void changeStatus_ONGOING() {
+        this.concertStatus = ConcertStatus.ONGOING;
+    }
+    public void changeStatus_COMPLETED() {
+        this.concertStatus = ConcertStatus.COMPLETED;
+    }
+    public void changeStatus_CANCELLED() {
+        this.concertStatus = ConcertStatus.CANCELLED;
     }
 }

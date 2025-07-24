@@ -54,13 +54,31 @@ class ConcertTest {
     }
 
     @Test
-    @DisplayName("콘서트 상태 변경")
-    void concertChangeStatus() {
+    @DisplayName("콘서트 상태 => 취소")
+    void concertChangeStatusCANCELLED() {
         // given
         // when
-         concert.changeStatus(ConcertStatus.CANCELLED);
+         concert.changeStatus_CANCELLED();
         // then
         assertEquals(concert.getConcertStatus(),ConcertStatus.CANCELLED);
+    }
+    @Test
+    @DisplayName("콘서트 상태 => 시작")
+    void concertChangeStatusONGOING() {
+        // given
+        // when
+         concert.changeStatus_ONGOING();
+        // then
+        assertEquals(concert.getConcertStatus(),ConcertStatus.ONGOING);
+    }
+    @Test
+    @DisplayName("콘서트 상태 => 종료")
+    void concertChangeStatusCOMPLETED() {
+        // given
+        // when
+        concert.changeStatus_COMPLETED();
+        // then
+        assertEquals(concert.getConcertStatus(),ConcertStatus.COMPLETED);
     }
 
 
