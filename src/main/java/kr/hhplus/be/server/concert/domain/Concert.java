@@ -12,7 +12,7 @@ public class Concert {
     private ConcertSchedule concertSchedule;
     private String artist;
     private ConcertStatus concertStatus = ConcertStatus.SCHEDULED;
-    private String desc;
+    private String description;
 
     public String getConcertDate() {
         return concertSchedule.getConcertDate();

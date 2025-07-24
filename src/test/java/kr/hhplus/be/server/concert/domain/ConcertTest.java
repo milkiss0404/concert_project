@@ -28,7 +28,7 @@ class ConcertTest {
                 .concertSchedule(concertSchedule)
                 .artist("레드벨벳")
                 .concertStatus(ConcertStatus.SCHEDULED)
-                .desc("비고")
+                .description("비고")
                 .build();
     }
 
