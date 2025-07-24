@@ -1,5 +1,6 @@
-package kr.hhplus.be.server.User.domain;
+package kr.hhplus.be.server.user.domain;
 
+import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,6 +13,17 @@ public class User {
     private String passWd;
     private Cash cash;
 
+    public User(Long i) {
+    }
+
+    public static UserEntity toUserEntity(User user){
+        return UserEntity.builder()
+                .id(user.id)
+                .username(user.username)
+                .passWd(user.passWd)
+                .cash(user.cash)
+                .build();
+    }
     public User chargeCash(int amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("충전금액은 0보다 커야합니다");
@@ -32,4 +44,4 @@ public class User {
 
         return new User(id, username, passWd, cash.useCash(amount));
     }
-}
+    }

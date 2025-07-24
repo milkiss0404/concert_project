@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.User.domain;
+package kr.hhplus.be.server.user.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
