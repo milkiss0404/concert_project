@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.config.jpa;
 
+import jakarta.persistence.EntityManagerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -10,13 +12,17 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 @EnableJpaAuditing
 @EnableJpaRepositories(
-        basePackages
-                ={ "kr.hhplus.be.server.concert.repository",
-        "kr.hhplus.be.server.seat.repository"})
+        basePackages = {
+                "kr.hhplus.be.server.concert.repository",
+                "kr.hhplus.be.server.seat.repository",
+                "kr.hhplus.be.server.user.repository",
+                "kr.hhplus.be.server.reservation.repository"
+        }
+)
 public class JpaConfig {
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
-        return new JpaTransactionManager();
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
     }
 }

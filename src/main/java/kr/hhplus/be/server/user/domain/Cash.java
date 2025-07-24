@@ -1,7 +1,6 @@
-package kr.hhplus.be.server.User.domain;
+package kr.hhplus.be.server.user.domain;
 
 import jakarta.persistence.Embeddable;
-import kr.hhplus.be.server.User.repository.entity.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

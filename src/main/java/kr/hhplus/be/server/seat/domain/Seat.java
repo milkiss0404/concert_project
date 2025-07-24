@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.seat.domain;
 
+import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
 import lombok.*;
 
 @NoArgsConstructor
@@ -20,6 +21,23 @@ public class Seat {
         this.zone = zone;
     }
 
+    public void holdingStatus() {
+        this.reservationStatus = ReservationStatus.HOLDING;
+    }
+    public void reserveStatus() {
+        this.reservationStatus = ReservationStatus.RESERVED;
+    }
+
+    public static SeatEntity toSeatEntity(Seat seat) {
+        return SeatEntity.builder()
+                .id(seat.id)
+                .zone(seat.zone)
+                .seatRow(seat.seatRow)
+                .seatNumber(seat.seatNumber)
+                .reservationStatus(seat.reservationStatus)
+                .build();
+
+    }
     public void cancelStatus() {
         this.reservationStatus = ReservationStatus.CANCELLED;
     }

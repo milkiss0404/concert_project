@@ -1,10 +1,9 @@
 package kr.hhplus.be.server.reservation.domain;
 
-import kr.hhplus.be.server.User.domain.User;
+import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.concert.domain.Concert;
 import kr.hhplus.be.server.seat.domain.ReservationStatus;
 import kr.hhplus.be.server.seat.domain.Seat;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("예약 테스트")
 class ReservationTest {

@@ -21,4 +21,11 @@ public class SeatRepositoryImpl implements SeatRepository {
         return seatEntity.toSeat();
     }
 
+    @Override
+    public void save(Seat seat) {
+        seat.reserveStatus();
+        SeatEntity seatEntity = Seat.toSeatEntity(seat);
+        jpaSeatRepository.save(seatEntity);
+    }
+
 }
