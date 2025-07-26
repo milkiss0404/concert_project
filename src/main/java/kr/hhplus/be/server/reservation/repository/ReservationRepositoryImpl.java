@@ -14,8 +14,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     private final JpaReservationRepository jpaReservationRepository;
 
     @Override
-    public void reserve(User user, Concert concert, Seat seat) {
-        Reservation reservation = Reservation.create(user, seat, concert);
+    public void reserve(Reservation reservation) {
         ReservationEntity entity = reservation.toEntity(reservation);
         jpaReservationRepository.save(entity);
     }

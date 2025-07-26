@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.concert.application.userCase;
 
+import kr.hhplus.be.server.concert.application.service.ConcertService;
+import kr.hhplus.be.server.reservation.domain.Reservation;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.repository.UserRepository;
 import kr.hhplus.be.server.concert.application.dtos.ChoiceSeatRequest;
@@ -19,7 +21,6 @@ public class ReserveUseCase {
     private final ReservationRepository reservationRepository;
     private final ConcertRepository concertRepository;
     private final UserRepository userRepository;
-
     @Transactional
     public Seat choiceSeat(Long concertId, ChoiceSeatRequest choiceSeatRequest) {
         Concert concert = concertRepository.findById(concertId);
@@ -28,7 +29,8 @@ public class ReserveUseCase {
 
         seat.holdingStatus();
 
-        reservationRepository.reserve(user,concert,seat);
+        Reservation reservation = Reservation.create(user, seat, concert);
+        reservationRepository.reserve(reservation);
         seatRepository.save(seat);
         return seat;
 
