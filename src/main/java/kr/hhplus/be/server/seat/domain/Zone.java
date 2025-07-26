@@ -1,8 +1,10 @@
 package kr.hhplus.be.server.seat.domain;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum Zone {
     VIP(150_000),
     R(100_000),
@@ -11,8 +13,5 @@ public enum Zone {
 
     private final int price;
 
-    Zone(int price) {
-        this.price = price;
-    }
 }
 
