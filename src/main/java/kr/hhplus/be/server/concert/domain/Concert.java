@@ -33,13 +33,13 @@ public class Concert {
     public String getConcertTime() {
         return concertSchedule.getConcertTimeString();
     }
-    public void changeStatus_ONGOING() {
+    public void ongoing() {
         this.concertStatus = ConcertStatus.ONGOING;
     }
-    public void changeStatus_COMPLETED() {
+    public void completed() {
         this.concertStatus = ConcertStatus.COMPLETED;
     }
-    public void changeStatus_CANCELLED() {
+    public void cancelled() {
         this.concertStatus = ConcertStatus.CANCELLED;
     }
 }

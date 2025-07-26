@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,7 +57,7 @@ class ConcertTest {
     void concertChangeStatusCANCELLED() {
         // given
         // when
-         concert.changeStatus_CANCELLED();
+         concert.cancelled();
         // then
         assertEquals(concert.getConcertStatus(),ConcertStatus.CANCELLED);
     }
@@ -67,7 +66,7 @@ class ConcertTest {
     void concertChangeStatusONGOING() {
         // given
         // when
-         concert.changeStatus_ONGOING();
+         concert.ongoing();
         // then
         assertEquals(concert.getConcertStatus(),ConcertStatus.ONGOING);
     }
@@ -76,7 +75,7 @@ class ConcertTest {
     void concertChangeStatusCOMPLETED() {
         // given
         // when
-        concert.changeStatus_COMPLETED();
+        concert.completed();
         // then
         assertEquals(concert.getConcertStatus(),ConcertStatus.COMPLETED);
     }
