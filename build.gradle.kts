@@ -44,8 +44,8 @@ dependencies {
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	testImplementation("org.mockito:mockito-core")
 	testImplementation("io.rest-assured:rest-assured:5.4.0")
+	testImplementation ("org.mockito:mockito-core:4.3.1")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
