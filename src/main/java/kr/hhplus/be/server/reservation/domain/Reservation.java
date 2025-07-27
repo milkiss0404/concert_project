@@ -1,10 +1,14 @@
 package kr.hhplus.be.server.reservation.domain;
 
+import jakarta.persistence.*;
+import kr.hhplus.be.server.concert.repository.entity.ConcertEntity;
+import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.concert.domain.Concert;
 import kr.hhplus.be.server.reservation.repository.entity.ReservationEntity;
 import kr.hhplus.be.server.seat.domain.ReservationStatus;
 import kr.hhplus.be.server.seat.domain.Seat;
+import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,6 +26,7 @@ public class Reservation {
     private LocalDateTime reservedAt;
     private LocalDateTime canceledAt;
 
+
     public static Reservation create(User user, Seat seat, Concert concert) {
         return Reservation.builder()
                 .user(user)
@@ -32,16 +37,6 @@ public class Reservation {
                 .build();
     }
 
-    public ReservationEntity toEntity(Reservation reservation) {
-         return ReservationEntity.builder()
-                .id(id)
-                .user(User.toUserEntity(reservation.user))
-                .concert(Concert.toConcertEntity(reservation.concert))
-                .seat(Seat.toSeatEntity(reservation.seat))
-                .reservedAt(reservedAt)
-                .status(status)
-                .build();
-    }
     // 예약 확정
     public void reserve() {
         this.status = ReservationStatus.RESERVED;

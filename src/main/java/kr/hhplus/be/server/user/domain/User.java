@@ -16,14 +16,6 @@ public class User {
     public User(Long i) {
     }
 
-    public static UserEntity toUserEntity(User user){
-        return UserEntity.builder()
-                .id(user.id)
-                .username(user.username)
-                .passWd(user.passWd)
-                .cash(user.cash)
-                .build();
-    }
     public User chargeCash(int amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("충전금액은 0보다 커야합니다");

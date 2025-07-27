@@ -22,15 +22,4 @@ public class UserEntity {
     @Embedded
     private Cash cash;
 
-    public UserEntity(Long i) {
-    }
-
-    public User toUser(UserEntity userEntity) {
-        return User.builder()
-                .id(id)
-                .username(username)
-                .passWd(passWd)
-                .cash(cash)
-                .build();
-    }
 }

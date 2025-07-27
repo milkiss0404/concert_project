@@ -26,14 +26,4 @@ public class ConcertEntity {
     private String description;
 
 
-    public Concert toConcert() {
-        return Concert.builder()
-                .id(id)
-                .concertTitle(concertTitle)
-                .concertSchedule(concertSchedule)
-                .artist(artist)
-                .concertStatus(concertStatus)
-                .description(description)
-                .build();
-    }
 }
