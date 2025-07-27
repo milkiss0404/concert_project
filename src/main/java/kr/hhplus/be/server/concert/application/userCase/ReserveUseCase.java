@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.concert.application.userCase;
 
-import kr.hhplus.be.server.concert.application.service.ConcertService;
 import kr.hhplus.be.server.reservation.domain.Reservation;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.repository.UserRepository;
@@ -21,18 +20,20 @@ public class ReserveUseCase {
     private final ReservationRepository reservationRepository;
     private final ConcertRepository concertRepository;
     private final UserRepository userRepository;
+
     @Transactional
     public Seat choiceSeat(Long concertId, ChoiceSeatRequest choiceSeatRequest) {
-        Concert concert = concertRepository.findById(concertId);
-        Seat seat = seatRepository.seatInfo(concertId, choiceSeatRequest.seatId());
-        User user = userRepository.findById(choiceSeatRequest.userId());
+            Concert concert = concertRepository.findById(concertId);
+            Seat seat = seatRepository.seatInfo(concertId, choiceSeatRequest.seatId());
+            User user = userRepository.findById(choiceSeatRequest.userId());
 
-        seat.holdingStatus();
+            seat.holdingStatus(); // holding 처리
+            Reservation reservation = Reservation.create(user, seat, concert);
 
-        Reservation reservation = Reservation.create(user, seat, concert);
-        reservationRepository.reserve(reservation);
-        seatRepository.save(seat);
-        return seat;
+            reservationRepository.reserve(reservation);
+            seatRepository.save(seat);
+            return seat;
 
     }
 }
+

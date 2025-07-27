@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.concert.application.userCase;
 
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
+import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
+import kr.hhplus.be.server.seat.modelMapper.SeatModelMapper;
 import kr.hhplus.be.server.user.repository.JpaUserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import kr.hhplus.be.server.concert.application.dtos.ChoiceSeatRequest;
@@ -32,9 +34,7 @@ import static org.assertj.core.api.Assertions.*;
 class ReserveUseCaseTest {
 
     @Autowired
-    private ReserveUseCase reserveUseCase;
-    @Autowired
-    private SeatRepository seatRepository;
+    private ReserveUseCase  reserveUseCase;
 
     @Autowired
     private JpaConcertRepository jpaConcertRepository;
@@ -48,31 +48,45 @@ class ReserveUseCaseTest {
     @Autowired
     private JpaSeatRepository jpaSeatRepository;
 
+    @Autowired
+    private ConcertModelMapper concertModelMapper;
+
     private Long concertId;
     private Long seatId;
     private List<Long> userIds;
-
     @BeforeEach
     void setUp() {
         LocalDateTime concertTime = LocalDateTime.of(2025, 7, 24, 18, 30);
         LocalDate concertDate = concertTime.toLocalDate();
+
         Concert concert = Concert.builder()
                 .concertTitle("테스트콘서트")
                 .concertSchedule(new ConcertSchedule(concertTime, concertDate))
                 .build();
-        ConcertEntity concertEntity = Concert.toConcertEntity(concert);
-        ConcertEntity saveEntity = jpaConcertRepository.save(concertEntity);
+
+        ConcertEntity savedConcertEntity = jpaConcertRepository.save(concertModelMapper.toEntity(concert));
 
         Seat seat = Seat.builder()
+                .concert(concert)
                 .zone(Zone.VIP)
                 .seatNumber(10)
                 .reservationStatus(ReservationStatus.AVAILABLE)
                 .seatRow("2열")
                 .build();
-        SeatEntity seatEntity = Seat.toSeatEntity(seat);
-        SeatEntity saveSeatEntity = jpaSeatRepository.save(seatEntity);
-        concertId = saveEntity.getId();
-        seatId = saveSeatEntity.getId();
+
+        SeatEntity seatEntity = SeatEntity.builder()
+                .concert(savedConcertEntity)
+                .zone(seat.getZone())
+                .seatNumber(seat.getSeatNumber())
+                .seatRow(seat.getSeatRow())
+                .reservationStatus(seat.getReservationStatus())
+                .build();
+
+
+        SeatEntity savedSeatEntity = jpaSeatRepository.save(seatEntity);
+
+        concertId = savedConcertEntity.getId();
+        seatId = savedSeatEntity.getId();
 
         userIds = new ArrayList<>();
         for (Long i = 0L; i < 100L; i++) {
@@ -80,7 +94,6 @@ class ReserveUseCaseTest {
             userIds.add(user.getId());
         }
     }
-
     @Test
     void 동시에_100명_좌석예약_테스트() throws InterruptedException {
         int threadCount = 100;
@@ -94,10 +107,12 @@ class ReserveUseCaseTest {
             final int userIndex = i;
             executor.submit(() -> {
                 try {
-                    barrier.await(); // 모든 스레드 동시에 출발
-                    reserveUseCase.choiceSeat(concertId, new ChoiceSeatRequest(userIds.get(userIndex), seatId));
+                    barrier.await();
+                    var seat = reserveUseCase.choiceSeat(concertId, new ChoiceSeatRequest(userIds.get(userIndex), seatId));
+                    System.out.println("예약 성공: " + seat.getId() + " by user " + userIds.get(userIndex));
                 } catch (Throwable t) {
                     exceptions.add(t);
+                    t.printStackTrace();
                 } finally {
                     latch.countDown();
                 }
@@ -105,8 +120,10 @@ class ReserveUseCaseTest {
         }
 
         latch.await();
+        executor.shutdown();
 
         List<ReservationEntity> reservations = jpaReservationRepository.findAll();
+        System.out.println("총 예약 건수: " + reservations.size());
         assertThat(reservations).hasSize(1);
         assertThat(exceptions.size()).isEqualTo(99);
     }
