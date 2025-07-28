@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.concert.controller;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import kr.hhplus.be.server.concert.application.dtos.ConcertFindRequest;
 import kr.hhplus.be.server.concert.domain.Concert;
 import kr.hhplus.be.server.concert.repository.ConcertRepository;
 import kr.hhplus.be.server.concert.repository.JpaConcertRepository;
@@ -62,7 +64,8 @@ import static org.hamcrest.Matchers.notNullValue;
     void findConcert_returnsOkAndConcertData() {
         RestAssured
                 .given()
-                .queryParam("concertId", testConcertId)
+                .contentType(ContentType.JSON)
+                .body(new ConcertFindRequest(testConcertId))
                 .when()
                 .get("/concert/find")
                 .then()

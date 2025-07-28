@@ -19,7 +19,7 @@ public class ConcertController {
     private final ReserveUseCase reserveUseCase;
 
     @GetMapping("/find")
-    public Response<ConcertFindResponse> findConcert(ConcertFindRequest concertFindRequest) {
+    public Response<ConcertFindResponse> findConcert(@RequestBody ConcertFindRequest concertFindRequest) {
         Concert concert = concertService.findConcert(concertFindRequest);
         ConcertFindResponse response = ConcertFindResponse.from(concert);
         return Response.ok(response);
@@ -34,7 +34,7 @@ public class ConcertController {
 
     @PostMapping("/{concertId}/seats/choice")
     public Response<ConcertSeatInfoResponse>choiceSeat(@PathVariable("concertId")Long concertId, ChoiceSeatRequest choiceSeatRequest){
-        Seat seat = reserveUseCase.choiceSeat(concertId, choiceSeatRequest);
+        Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, choiceSeatRequest);
         ConcertSeatInfoResponse response = ConcertSeatInfoResponse.from(seat);
         return Response.ok(response);
     }
