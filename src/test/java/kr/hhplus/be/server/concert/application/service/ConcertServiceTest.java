@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ConcertServiceTest")
+@DisplayName("콘서트 서비스 테스트")
 @Nested
 class ConcertServiceTest {
 

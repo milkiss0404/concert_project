@@ -1,20 +1,20 @@
 package kr.hhplus.be.server.user.application.dto;
 
-import kr.hhplus.be.server.user.domain.Cash;
+import kr.hhplus.be.server.user.domain.Point;
 import kr.hhplus.be.server.user.domain.User;
 
-public record ChargingCashResponse (
+public record ChargingPointResponse(
         Long id,
         String username,
         String passWd,
-        Cash cash
+        Point point
 ){
-    public static ChargingCashResponse from(User user) {
-     return new ChargingCashResponse(
+    public static ChargingPointResponse from(User user) {
+     return new ChargingPointResponse(
                 user.getId(),
                 user.getUsername(),
                 user.getPassWd(),
-                new Cash(user.getId(), user.getCash())
+                new Point(user.getId(), user.getPoint())
         );
     }
 }

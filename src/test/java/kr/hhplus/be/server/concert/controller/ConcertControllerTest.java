@@ -8,6 +8,7 @@ import kr.hhplus.be.server.concert.repository.ConcertRepository;
 import kr.hhplus.be.server.concert.repository.JpaConcertRepository;
 import kr.hhplus.be.server.concert.repository.entity.ConcertEntity;
 import kr.hhplus.be.server.config.ui.Response;
+import kr.hhplus.be.server.reservation.repository.JpaReservationRepository;
 import kr.hhplus.be.server.seat.domain.ReservationStatus;
 import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.JpaSeatRepository;
@@ -34,6 +35,9 @@ import static org.hamcrest.Matchers.notNullValue;
     private JpaConcertRepository jpaConcertRepository;
     @Autowired
     private JpaSeatRepository jpaSeatRepository;
+    @Autowired
+    private JpaReservationRepository jpaReservationRepository;
+
     private Long testConcertId;
     private Long testSeatId;
 
@@ -42,6 +46,7 @@ import static org.hamcrest.Matchers.notNullValue;
         super.setUp();
         jpaSeatRepository.deleteAll();
         jpaConcertRepository.deleteAll();
+        jpaReservationRepository.deleteAll();
 
         ConcertEntity 테스트_콘서트 = ConcertEntity.builder()
                 .concertTitle("테스트 콘서트")

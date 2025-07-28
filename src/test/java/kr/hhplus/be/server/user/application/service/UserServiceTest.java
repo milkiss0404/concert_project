@@ -1,18 +1,16 @@
 package kr.hhplus.be.server.user.application.service;
 
-import kr.hhplus.be.server.user.application.dto.ChargingCashRequest;
-import kr.hhplus.be.server.user.domain.Cash;
+import kr.hhplus.be.server.user.application.dto.ChargingPointRequest;
+import kr.hhplus.be.server.user.domain.Point;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.modelMapper.UserModelMapper;
 import kr.hhplus.be.server.user.repository.UserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -20,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+@DisplayName("유저 포인트 충전/사용 ")
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
@@ -38,13 +37,13 @@ class UserServiceTest {
         // given
         Long userId = 999L;
         int chargingAmount = 10000;
-        ChargingCashRequest request = new ChargingCashRequest(userId, chargingAmount);
+        ChargingPointRequest request = new ChargingPointRequest(userId, chargingAmount);
 
         when(userRepository.findById(userId)).thenReturn(null);
 
         // when & then
         assertThrows(NullPointerException.class, () -> {
-            userService.chargingCash(request);
+            userService.chargingPoint(request);
         });
     }
 
@@ -56,11 +55,11 @@ class UserServiceTest {
         int chargingAmount = 0;
         int initialCashAmount = 20000;
 
-        Cash initialCash = new Cash(userId, initialCashAmount);
-        UserEntity userEntity = new UserEntity(initialCash);
-        User user = new User(initialCash);
+        Point initialPoint = new Point(userId, initialCashAmount);
+        UserEntity userEntity = new UserEntity(initialPoint);
+        User user = new User(initialPoint);
 
-        ChargingCashRequest request = new ChargingCashRequest(userId, chargingAmount);
+        ChargingPointRequest request = new ChargingPointRequest(userId, chargingAmount);
 
         when(userRepository.findById(userId)).thenReturn(userEntity);
         when(modelMapper.toDomainBuilder(any(UserEntity.class))).thenReturn(user);
@@ -68,7 +67,7 @@ class UserServiceTest {
         //when
         //then
         assertThrows( IllegalArgumentException.class,()->{
-            userService.chargingCash(request);
+            userService.chargingPoint(request);
                 });
 
         verify(userRepository).findById(userId);
@@ -85,21 +84,21 @@ class UserServiceTest {
         int initialCashAmount = 20000;
         int expectedCashAmount = 30000;
 
-        Cash initialCash = new Cash(userId, initialCashAmount);
-        UserEntity userEntity = new UserEntity(initialCash);
-        User user = new User(initialCash);
+        Point initialPoint = new Point(userId, initialCashAmount);
+        UserEntity userEntity = new UserEntity(initialPoint);
+        User user = new User(initialPoint);
 
-        ChargingCashRequest request = new ChargingCashRequest(userId, chargingAmount);
+        ChargingPointRequest request = new ChargingPointRequest(userId, chargingAmount);
 
         when(userRepository.findById(userId)).thenReturn(userEntity);
         when(modelMapper.toDomainBuilder(any(UserEntity.class))).thenReturn(user);
 
-        User result = userService.chargingCash(request);
+        User result = userService.chargingPoint(request);
 
         assertThat(result).isNotNull();
-        assertThat(result.getCash()).isEqualTo(expectedCashAmount);
+        assertThat(result.getPoint()).isEqualTo(expectedCashAmount);
 
-        assertThat(userEntity.getCash()).isEqualTo(expectedCashAmount);
+        assertThat(userEntity.getPoint()).isEqualTo(expectedCashAmount);
 
 
         verify(userRepository).findById(userId);

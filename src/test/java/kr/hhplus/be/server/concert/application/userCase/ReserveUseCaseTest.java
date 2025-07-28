@@ -2,8 +2,7 @@ package kr.hhplus.be.server.concert.application.userCase;
 
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
 import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
-import kr.hhplus.be.server.user.domain.Cash;
-import kr.hhplus.be.server.user.domain.User;
+import kr.hhplus.be.server.user.domain.Point;
 import kr.hhplus.be.server.user.repository.JpaUserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import kr.hhplus.be.server.concert.application.dtos.ChoiceSeatRequest;
@@ -17,9 +16,9 @@ import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.JpaSeatRepository;
 import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +33,8 @@ import java.util.concurrent.*;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
+@DisplayName("예약 E2E 테스트")
+@Nested
 class ReserveUseCaseTest {
 
     @Autowired
@@ -93,7 +94,7 @@ class ReserveUseCaseTest {
 
         userIds = new ArrayList<>();
         for (Long i = 1L; i < 100L; i++) {
-            UserEntity user = jpaUserRepository.save(new UserEntity(null,"유저명","1234",new Cash(i, 1000000)));
+            UserEntity user = jpaUserRepository.save(new UserEntity(null,"유저명","1234",new Point(i, 1000000)));
             userIds.add(user.getId());
         }
     }
@@ -137,14 +138,14 @@ class ReserveUseCaseTest {
     void usingCash() {
         // given
         Long userId = 1L;
-        UserEntity user = new UserEntity(userId,"유저명","1234",new Cash(userId, 1000000));
+        UserEntity user = new UserEntity(userId,"유저명","1234",new Point(userId, 1000000));
         jpaUserRepository.save(user);
         // when
         Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, new ChoiceSeatRequest(user.getId(), seatId));
         // then
         Optional<UserEntity> byId = jpaUserRepository.findById(userId);
 
-        assertThat(byId.get().getCash()).isEqualTo(850000);
+        assertThat(byId.get().getPoint()).isEqualTo(850000);
         assertThat(seat.getReservationStatus()).isEqualTo(ReservationStatus.RESERVED);
     }
 

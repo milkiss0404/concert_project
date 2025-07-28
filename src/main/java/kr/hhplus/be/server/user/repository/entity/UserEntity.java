@@ -1,8 +1,7 @@
 package kr.hhplus.be.server.user.repository.entity;
 
 import jakarta.persistence.*;
-import kr.hhplus.be.server.user.domain.Cash;
-import kr.hhplus.be.server.user.domain.User;
+import kr.hhplus.be.server.user.domain.Point;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,17 +19,17 @@ public class UserEntity {
     private String username;
     private String passWd;
     @Embedded
-    private Cash cash;
+    private Point point;
 
-    public void updateCash(int cash) {
-        this.cash = new Cash(id, cash);
+    public void updatePoint(int point) {
+        this.point = new Point(id, point);
     }
 
-    public UserEntity(Cash cash) {
-        this.cash = cash;
+    public UserEntity(Point point) {
+        this.point = point;
     }
 
-    public int getCash() {
-        return this.cash.getCash();
+    public int getPoint() {
+        return this.point.getPoint();
     }
 }

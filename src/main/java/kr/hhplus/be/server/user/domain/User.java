@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.user.domain;
 
-import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import lombok.*;
 
 @AllArgsConstructor
@@ -11,33 +10,33 @@ public class User {
     private Long id;
     private String username;
     private String passWd;
-    private Cash cash;
+    private Point point;
 
     public User(Long i) {
     }
 
-    public User chargeCash(int amount) {
+    public User chargePoint(int amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("충전금액은 0보다 커야합니다");
         }
-        return new User(id, username, passWd, cash.chargeCash(amount));
+        return new User(id, username, passWd, point.chargePoint(amount));
     }
-    public int getCash() {
-        return cash.getCash();
+    public int getPoint() {
+        return point.getPoint();
     }
 
-    public User useCash(int amount) {
-        if (amount>this.cash.getCash()){
+    public User usePoint(int amount) {
+        if (amount>this.point.getPoint()){
             throw new IllegalArgumentException("잔액이 부족합니다");
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("사용금액은 0보다 커야합니다");
         }
 
-        return new User(id, username, passWd, cash.useCash(amount));
+        return new User(id, username, passWd, point.usePoint(amount));
     }
 
-    public User(Cash cash) {
-        this.cash = cash;
+    public User(Point point) {
+        this.point = point;
     }
 }
