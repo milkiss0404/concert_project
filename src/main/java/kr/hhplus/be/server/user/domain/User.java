@@ -36,4 +36,8 @@ public class User {
 
         return new User(id, username, passWd, cash.useCash(amount));
     }
+
+    public User(Cash cash) {
+        this.cash = cash;
     }
+}

@@ -22,4 +22,15 @@ public class UserEntity {
     @Embedded
     private Cash cash;
 
+    public void updateCash(int cash) {
+        this.cash = new Cash(id, cash);
+    }
+
+    public UserEntity(Cash cash) {
+        this.cash = cash;
+    }
+
+    public int getCash() {
+        return this.cash.getCash();
+    }
 }

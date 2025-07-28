@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.user.repository;
 
+import kr.hhplus.be.server.user.domain.Cash;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.modelMapper.UserModelMapper;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
@@ -13,9 +14,13 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserModelMapper modelMapper;
 
     @Override
-    public User findById(Long userId) {
-        UserEntity userEntity = jpaUserRepository.findById(userId).
+    public void save(UserEntity user) {
+        jpaUserRepository.save(user);
+    }
+
+    @Override
+    public UserEntity findById(Long userId) {
+       return jpaUserRepository.findById(userId).
                 orElseThrow(() -> new IllegalArgumentException("없는 유저입니다"));
-        return modelMapper.toDomain(userEntity);
     }
 }
