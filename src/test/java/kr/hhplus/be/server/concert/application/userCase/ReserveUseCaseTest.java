@@ -2,6 +2,8 @@ package kr.hhplus.be.server.concert.application.userCase;
 
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
 import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
+import kr.hhplus.be.server.user.domain.Cash;
+import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.repository.JpaUserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import kr.hhplus.be.server.concert.application.dtos.ChoiceSeatRequest;
@@ -15,7 +17,9 @@ import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.JpaSeatRepository;
 import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
@@ -87,12 +92,13 @@ class ReserveUseCaseTest {
         seatId = savedSeatEntity.getId();
 
         userIds = new ArrayList<>();
-        for (Long i = 0L; i < 100L; i++) {
-            UserEntity user = jpaUserRepository.save(new UserEntity());
+        for (Long i = 1L; i < 100L; i++) {
+            UserEntity user = jpaUserRepository.save(new UserEntity(null,"유저명","1234",new Cash(i, 1000000)));
             userIds.add(user.getId());
         }
     }
     @Test
+    @DisplayName("동시에_100명_좌석예약_테스트")
     void 동시에_100명_좌석예약_테스트() throws InterruptedException {
         int threadCount = 100;
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
@@ -125,4 +131,21 @@ class ReserveUseCaseTest {
         assertThat(reservations).hasSize(1);
         assertThat(exceptions.size()).isEqualTo(99);
     }
+
+    @Test
+    @DisplayName("좌석예약_테스트_금액사용")
+    void usingCash() {
+        // given
+        Long userId = 1L;
+        UserEntity user = new UserEntity(userId,"유저명","1234",new Cash(userId, 1000000));
+        jpaUserRepository.save(user);
+        // when
+        Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, new ChoiceSeatRequest(user.getId(), seatId));
+        // then
+        Optional<UserEntity> byId = jpaUserRepository.findById(userId);
+
+        assertThat(byId.get().getCash()).isEqualTo(850000);
+        assertThat(seat.getReservationStatus()).isEqualTo(ReservationStatus.RESERVED);
+    }
+
 }

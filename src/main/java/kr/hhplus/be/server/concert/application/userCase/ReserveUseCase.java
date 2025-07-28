@@ -2,6 +2,7 @@ package kr.hhplus.be.server.concert.application.userCase;
 
 import kr.hhplus.be.server.reservation.domain.Reservation;
 import kr.hhplus.be.server.user.application.dto.ChargingCashRequest;
+import kr.hhplus.be.server.user.application.dto.UsingUserCashRequest;
 import kr.hhplus.be.server.user.application.service.UserService;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.modelMapper.UserModelMapper;
@@ -19,15 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class ReserveUseCase {
     private final SeatRepository seatRepository;
     private final ReservationRepository reservationRepository;
     private final ConcertRepository concertRepository;
     private final UserRepository userRepository;
     private final UserModelMapper userModelMapper;
+    private final UserService userService;
 
 
-    @Transactional
     public Seat choiceSeatAndReserve(Long concertId, ChoiceSeatRequest choiceSeatRequest) {
             Concert concert = concertRepository.findById(concertId);
             Seat seat = seatRepository.seatInfo(concertId, choiceSeatRequest.seatId());
@@ -37,10 +39,11 @@ public class ReserveUseCase {
             seat.holdingStatus(); // holding 처리
             Reservation reservation = Reservation.create(user, seat, concert);
             //여기에 돈 사용하는 로직 추가
+            userService.usingUserCash(new UsingUserCashRequest(user.getId(), seat.getSeatPrice()));
+
             reservationRepository.reserve(reservation);
             seatRepository.save(seat);
             return seat;
-
     }
 }
 
