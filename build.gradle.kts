@@ -50,6 +50,7 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+	implementation ("org.modelmapper:modelmapper:3.1.1")
 }
 
 tasks.withType<Test> {
