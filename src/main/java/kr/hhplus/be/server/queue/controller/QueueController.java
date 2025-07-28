@@ -38,7 +38,7 @@ public class QueueController {
         redisTemplate.opsForValue().set(redisTokenKey, userId.toString(), Duration.ofMinutes(60));
 
         // 4. 대기열 진입 메시지 발행
-        redisTemplate.convertAndSend("queue:log", "User " + userId + " joined concert " + concertId);
+        redisTemplate.convertAndSend("queue:log", "User " + userId + " joined Queue " + concertId);
 
         // 5. 토큰 응답
         return ResponseEntity.ok(token);
