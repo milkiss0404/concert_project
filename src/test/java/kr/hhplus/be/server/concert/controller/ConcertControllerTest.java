@@ -35,8 +35,6 @@ import static org.hamcrest.Matchers.notNullValue;
     private JpaConcertRepository jpaConcertRepository;
     @Autowired
     private JpaSeatRepository jpaSeatRepository;
-    @Autowired
-    private JpaReservationRepository jpaReservationRepository;
 
     private Long testConcertId;
     private Long testSeatId;
@@ -46,7 +44,6 @@ import static org.hamcrest.Matchers.notNullValue;
         super.setUp();
         jpaSeatRepository.deleteAll();
         jpaConcertRepository.deleteAll();
-        jpaReservationRepository.deleteAll();
 
         ConcertEntity 테스트_콘서트 = ConcertEntity.builder()
                 .concertTitle("테스트 콘서트")

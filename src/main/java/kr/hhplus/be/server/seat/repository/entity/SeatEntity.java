@@ -23,7 +23,7 @@ public class SeatEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "concert_id")
+//    @JoinColumn(name = "concert_id")
     private ConcertEntity concert;
 
     @Enumerated(EnumType.STRING)

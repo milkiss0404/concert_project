@@ -21,15 +21,13 @@ public class UserControllerTest extends ApiTest {
     @Autowired
     private JpaUserRepository jpaUserRepository;
 
-    @Autowired
-    private JpaReservationRepository jpaReservationRepository;
+
     private UserEntity savedUser;
 
 
     @BeforeEach
     public void setUp() {
         super.setUp();
-        jpaReservationRepository.deleteAll();
         jpaUserRepository.deleteAll();
         Long userId = 1L;
         Point point = new Point(userId, 5000);

@@ -23,15 +23,15 @@ public class ReservationEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+//    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "concert_id", nullable = false)
+//    @JoinColumn(name = "concert_id", nullable = false)
     private ConcertEntity concert;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seat_id", nullable = false)
+//    @JoinColumn(name = "seat_id", nullable = false)
     private SeatEntity seat;
 
     @Enumerated(EnumType.STRING)
