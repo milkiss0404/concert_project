@@ -2,7 +2,6 @@ package kr.hhplus.be.server.concert.application.userCase;
 
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
 import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
-import kr.hhplus.be.server.seat.modelMapper.SeatModelMapper;
 import kr.hhplus.be.server.user.repository.JpaUserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import kr.hhplus.be.server.concert.application.dtos.ChoiceSeatRequest;
@@ -15,7 +14,6 @@ import kr.hhplus.be.server.seat.domain.ReservationStatus;
 import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.JpaSeatRepository;
-import kr.hhplus.be.server.seat.repository.SeatRepository;
 import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -108,7 +106,7 @@ class ReserveUseCaseTest {
             executor.submit(() -> {
                 try {
                     barrier.await();
-                    var seat = reserveUseCase.choiceSeat(concertId, new ChoiceSeatRequest(userIds.get(userIndex), seatId));
+                    var seat = reserveUseCase.choiceSeatAndReserve(concertId, new ChoiceSeatRequest(userIds.get(userIndex), seatId));
                     System.out.println("예약 성공: " + seat.getId() + " by user " + userIds.get(userIndex));
                 } catch (Throwable t) {
                     exceptions.add(t);
