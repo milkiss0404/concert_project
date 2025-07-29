@@ -18,6 +18,7 @@ public class ConcertController {
     private final SeatService seatService;
     private final ReserveUseCase reserveUseCase;
 
+    //콘서트 조회
     @GetMapping("/find")
     public Response<ConcertFindResponse> findConcert(@RequestBody ConcertFindRequest concertFindRequest) {
         Concert concert = concertService.findConcert(concertFindRequest);
@@ -25,6 +26,7 @@ public class ConcertController {
         return Response.ok(response);
     }
 
+    //콘서트 자리 조회
     @GetMapping("/{concertId}/seats")
     public Response<ConcertSeatInfoResponse> seatInfo(@PathVariable("concertId")Long concertId, ConcertSeatInfoRequest seatInfoRequest) {
         Seat seat = seatService.seatInfo(concertId, seatInfoRequest);
@@ -32,6 +34,7 @@ public class ConcertController {
         return Response.ok(response);
     }
 
+    //콘서트 자리 선택
     @PostMapping("/{concertId}/seats/choice")
     public Response<ConcertSeatInfoResponse>choiceSeat(@PathVariable("concertId")Long concertId, ChoiceSeatRequest choiceSeatRequest){
         Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, choiceSeatRequest);

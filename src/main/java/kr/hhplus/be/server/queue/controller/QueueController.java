@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.queue.controller;
 
-import kr.hhplus.be.server.config.ui.Response;
-import kr.hhplus.be.server.queue.provider.QueueTokenProvider;
+import kr.hhplus.be.server.queue.jwt.QueueTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;

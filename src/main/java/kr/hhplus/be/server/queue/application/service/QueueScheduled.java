@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.queue.application.service;
 
-import kr.hhplus.be.server.queue.provider.QueueTokenProvider;
+import kr.hhplus.be.server.queue.jwt.QueueTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +16,7 @@ public class QueueScheduled {
     private final QueueTokenProvider queueTokenProvider;
     private final QueueService queueService;
 
-    private static final int MAX = 5;
+    private static final int MAX = 100;
     private static final String QUEUE_KEY_PREFIX = "concert:queue:";
     private static final String TOKEN_KEY_PREFIX = "queue:token:";
 

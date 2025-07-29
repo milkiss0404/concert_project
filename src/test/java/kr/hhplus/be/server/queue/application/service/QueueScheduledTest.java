@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.queue.application.service;
 
-import kr.hhplus.be.server.queue.provider.QueueTokenProvider;
-import org.assertj.core.api.Assertions;
+import kr.hhplus.be.server.queue.jwt.QueueTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("스케쥴러 테스트")

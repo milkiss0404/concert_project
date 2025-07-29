@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.queue.provider;
+package kr.hhplus.be.server.queue.jwt;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
