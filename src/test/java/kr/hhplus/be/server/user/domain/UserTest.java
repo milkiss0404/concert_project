@@ -15,7 +15,7 @@ class UserTest {
 
     @BeforeEach
     void setUp() {
-        point = new Point(1L, 0);
+        point = new Point(0);
         user = User.builder()
                 .id(1L)
                 .passWd("1234")
