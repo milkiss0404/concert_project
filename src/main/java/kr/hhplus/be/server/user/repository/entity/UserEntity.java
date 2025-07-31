@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Getter
+@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,7 @@ public class UserEntity {
     private Point point;
 
     public void updatePoint(int point) {
-        this.point = new Point(id, point);
+        this.point = new Point(point);
     }
 
     public UserEntity(Point point) {

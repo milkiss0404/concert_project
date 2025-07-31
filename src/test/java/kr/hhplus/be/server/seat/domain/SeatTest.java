@@ -29,7 +29,7 @@ class SeatTest {
         // when
         int seatPrice = seat.getSeatPrice();
         // then
-        assertEquals(SeatGrade.VIP.getPrice(),seatPrice);
+        assertEquals(Zone.VIP.getPrice(),seatPrice);
     }
 
     @Test

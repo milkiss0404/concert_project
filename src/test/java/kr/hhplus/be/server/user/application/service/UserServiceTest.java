@@ -55,7 +55,7 @@ class UserServiceTest {
         int chargingAmount = 0;
         int initialCashAmount = 20000;
 
-        Point initialPoint = new Point(userId, initialCashAmount);
+        Point initialPoint = new Point(initialCashAmount);
         UserEntity userEntity = new UserEntity(initialPoint);
         User user = new User(initialPoint);
 
@@ -84,7 +84,7 @@ class UserServiceTest {
         int initialCashAmount = 20000;
         int expectedCashAmount = 30000;
 
-        Point initialPoint = new Point(userId, initialCashAmount);
+        Point initialPoint = new Point(initialCashAmount);
         UserEntity userEntity = new UserEntity(initialPoint);
         User user = new User(initialPoint);
 

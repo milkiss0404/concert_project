@@ -30,7 +30,7 @@ public class UserControllerTest extends ApiTest {
         super.setUp();
         jpaUserRepository.deleteAll();
         Long userId = 1L;
-        Point point = new Point(userId, 5000);
+        Point point = new Point( 5000);
         savedUser = jpaUserRepository.save(
                 new UserEntity(null, "유저명", "1234", point)
         );

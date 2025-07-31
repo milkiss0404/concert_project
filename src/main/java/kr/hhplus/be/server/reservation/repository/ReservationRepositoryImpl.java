@@ -13,11 +13,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
     private final JpaReservationRepository jpaReservationRepository;
-    private final ReservationModelMapper modelMapper;
 
     @Override
-    public void reserve(Reservation reservation) {
-        ReservationEntity entity = modelMapper.toEntity(reservation);
-        jpaReservationRepository.save(entity);
+    public ReservationEntity reserve(ReservationEntity reservationEntity) {
+        return jpaReservationRepository.save(reservationEntity);
     }
 }
