@@ -11,11 +11,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "seats")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
+@Table(name = "seats",
+        indexes = {
+                @Index(name = "idx_zone_concert_reservation", columnList = "concert_id, zone, reservation_status")
+        })
 public class SeatEntity {
 
     @Id
