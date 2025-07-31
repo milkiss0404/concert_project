@@ -42,6 +42,13 @@ ON seats (zone, concert_id, reservation_status);
 
 복합 인덱스를 적용한 덕분에 세 가지 조건(concert_id, zone, reservation_status)을 한 번에 인덱스로 조회할 수 있어 쿼리 성능이 개선되었습니다. 테이블 전체를 탐색하지 않아도 되고, 불필요한 디스크 I/O도 줄어들었습니다.!!
 
+@Table(name = "seats",
+indexes = {
+@Index(name = "idx_zone_concert_reservation", columnList = "concert_id, zone, reservation_status")
+})
+public class SeatEntity {
+
+
 - [ ] 테이블 구조 개선안 (선택)
 - [ ] Infrastructure Layer 구성
 - [ ] 기능별 통합 테스트
