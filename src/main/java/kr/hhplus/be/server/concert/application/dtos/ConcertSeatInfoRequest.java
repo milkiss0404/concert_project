@@ -1,4 +1,4 @@
 package kr.hhplus.be.server.concert.application.dtos;
 
-public record ConcertSeatInfoRequest(Long seatId) {
+public record ConcertSeatInfoRequest(Long concertId,Long seatId) {
 }
