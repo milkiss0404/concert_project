@@ -12,12 +12,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Component
-public class QueueTokenProvider {
+public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    public String createQueueToken(Long userId, Long concertId) {
+    public String createJwtToken(Long userId, Long concertId) {
         return Jwts.builder()
                 .setSubject(userId.toString())
                 .claim("concertId", concertId)
