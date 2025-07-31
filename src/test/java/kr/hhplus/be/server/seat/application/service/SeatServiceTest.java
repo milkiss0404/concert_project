@@ -1,50 +1,58 @@
 package kr.hhplus.be.server.seat.application.service;
 
 import kr.hhplus.be.server.concert.application.dtos.ConcertSeatInfoRequest;
+import kr.hhplus.be.server.concert.repository.JpaConcertRepository;
+import kr.hhplus.be.server.concert.repository.entity.ConcertEntity;
+import kr.hhplus.be.server.config.CustomTestContainer;
+import kr.hhplus.be.server.seat.domain.ReservationStatus;
 import kr.hhplus.be.server.seat.domain.Seat;
+import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.SeatRepository;
-import org.junit.jupiter.api.BeforeEach;
+import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("좌석 조회 단위테스트")
-class SeatServiceTest {
+@DisplayName("SeatService 통합테스트")
+class SeatServiceTest extends CustomTestContainer {
 
-    @Mock
+    @Autowired
     private SeatRepository seatRepository;
 
-    @InjectMocks
+    @Autowired
     private SeatService seatService;
+    @Autowired
+    private JpaConcertRepository concertRepository;
 
-
+    @DisplayName("좌석 조회 통합테스트")
     @Test
     void seatInfo_shouldReturnSeat_whenSeatExists() {
         // given
-        Long concertId = 1L;
-        Long seatId = 40L;
-        ConcertSeatInfoRequest request = new ConcertSeatInfoRequest(seatId);
-
-        Seat expectedSeat = Seat.builder()
-                .id(seatId)
+        ConcertEntity concert = ConcertEntity.builder()
+                .concertTitle("concert")
+                .build();
+        ConcertEntity savedConcert = concertRepository.save(concert);
+        SeatEntity expectedSeat = SeatEntity.builder()
+                .concert(concert)
+                .seatNumber(1)
+                .zone(Zone.S)
+                .reservationStatus(ReservationStatus.AVAILABLE)
                 .build();
 
-        when(seatRepository.seatInfo(concertId, seatId)).thenReturn(expectedSeat);
+        // 저장 후 생성된 ID 사용
+        SeatEntity savedSeat = seatRepository.save(expectedSeat);
+        Long seatId = savedSeat.getId();
+
 
         // when
-        Seat actualSeat = seatService.seatInfo(concertId, request);
+        Seat actualSeat = seatService.seatInfo(savedConcert.getId(), seatId);
 
         // then
         assertNotNull(actualSeat);
-        assertEquals(expectedSeat.getId(), actualSeat.getId());
-        verify(seatRepository, times(1)).seatInfo(concertId, seatId);
+        assertEquals(savedSeat.getId(), actualSeat.getId());
     }
 }
