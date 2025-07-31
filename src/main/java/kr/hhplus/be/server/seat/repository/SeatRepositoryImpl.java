@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.seat.repository;
 
+import kr.hhplus.be.server.concert.application.dtos.ConcertSeatInfoRequest;
 import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.modelMapper.SeatModelMapper;
 import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class SeatRepositoryImpl implements SeatRepository {
     private final JpaSeatRepository jpaSeatRepository;
-    private final SeatModelMapper modelMapper;
+
     @Override
-    public Seat seatInfo(Long concertId, Long seatId) {
+    public SeatEntity seatInfo(Long concertId,Long seatId) {
 
         SeatEntity seatEntity = jpaSeatRepository.findById(seatId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 좌석이 존재하지 않습니다."));
@@ -20,13 +21,12 @@ public class SeatRepositoryImpl implements SeatRepository {
         if (!seatEntity.getConcert().getId().equals(concertId)) {
             throw new IllegalArgumentException("좌석이 해당 콘서트에 속하지 않습니다.");
         }
-        return modelMapper.toDomain(seatEntity);
+        return seatEntity;
     }
 
     @Override
-    public void save(Seat seat) {
-        seat.reserveStatus();
-        jpaSeatRepository.save(modelMapper.toEntity(seat));
+    public SeatEntity save(SeatEntity seatEntity) {
+        return jpaSeatRepository.save(seatEntity);
     }
 
 }

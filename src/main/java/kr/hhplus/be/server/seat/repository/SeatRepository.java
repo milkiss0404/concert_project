@@ -1,9 +1,11 @@
 package kr.hhplus.be.server.seat.repository;
 
+import kr.hhplus.be.server.concert.application.dtos.ConcertSeatInfoRequest;
 import kr.hhplus.be.server.seat.domain.Seat;
+import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
 
 public interface SeatRepository {
-    Seat seatInfo(Long concertId , Long seatId);
+    SeatEntity seatInfo(Long concertId,Long seatId);
 
-    void save(Seat seat);
+    SeatEntity save(SeatEntity seatEntity);
 }

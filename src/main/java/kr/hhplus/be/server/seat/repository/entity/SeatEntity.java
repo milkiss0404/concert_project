@@ -27,17 +27,13 @@ public class SeatEntity {
     private ConcertEntity concert;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Zone zone;
 
-    @Column(nullable = false)
     private String seatRow;
 
-    @Column(nullable = false)
     private int seatNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ReservationStatus reservationStatus = ReservationStatus.AVAILABLE;
 
     public Seat toSeat() {
