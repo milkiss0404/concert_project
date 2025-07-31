@@ -20,24 +20,24 @@ public class ConcertController {
 
     //콘서트 조회
     @GetMapping("/find")
-    public Response<ConcertFindResponse> findConcert(@RequestBody ConcertFindRequest concertFindRequest) {
-        Concert concert = concertService.findConcert(concertFindRequest);
+    public Response<ConcertFindResponse> findConcert(@RequestParam("concertId") Long concertId) {
+        Concert concert = concertService.findConcert(concertId);
         ConcertFindResponse response = ConcertFindResponse.from(concert);
         return Response.ok(response);
     }
 
     //콘서트 자리 조회
     @GetMapping("/{concertId}/seats")
-    public Response<ConcertSeatInfoResponse> seatInfo(@PathVariable("concertId")Long concertId, ConcertSeatInfoRequest seatInfoRequest) {
-        Seat seat = seatService.seatInfo(concertId, seatInfoRequest);
+    public Response<ConcertSeatInfoResponse> seatInfo(@PathVariable("concertId")Long concertId,@RequestParam("seatId") Long seatId) {
+        Seat seat = seatService.seatInfo(concertId, seatId);
         ConcertSeatInfoResponse response = ConcertSeatInfoResponse.from(seat);
         return Response.ok(response);
     }
 
     //콘서트 자리 선택
     @PostMapping("/{concertId}/seats/choice")
-    public Response<ConcertSeatInfoResponse>choiceSeat(@PathVariable("concertId")Long concertId, ChoiceSeatRequest choiceSeatRequest){
-        Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, choiceSeatRequest);
+    public Response<ConcertSeatInfoResponse>choiceSeat(@PathVariable("concertId")Long concertId,@RequestParam("seatId") Long seatId ,@RequestParam("userId") Long userId){
+        Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, seatId,userId);
         ConcertSeatInfoResponse response = ConcertSeatInfoResponse.from(seat);
         return Response.ok(response);
     }

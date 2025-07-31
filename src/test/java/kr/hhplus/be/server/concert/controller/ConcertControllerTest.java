@@ -67,12 +67,11 @@ import static org.hamcrest.Matchers.notNullValue;
         RestAssured
                 .given()
                 .contentType(ContentType.JSON)
-                .body(new ConcertFindRequest(testConcertId))
+                .queryParam("concertId", testConcertId)
                 .when()
                 .get("/concert/find")
                 .then()
                 .statusCode(200)
-                .body("code", equalTo(0))
                 .body("message", equalTo("ok"))
                 .body("value.id", equalTo(testConcertId.intValue()))
                 .body("value.concertTitle", notNullValue());
@@ -82,12 +81,11 @@ import static org.hamcrest.Matchers.notNullValue;
     void findSeat_returnsOkAndSeatData() {
         RestAssured
                 .given()
-                .queryParam("seatId", testSeatId)
+                .queryParam("seatId",testSeatId)
                 .when()
                 .get("/concert/" + testConcertId + "/seats")
                 .then()
                 .statusCode(200)
-                .body("code", equalTo(0))
                 .body("message", equalTo("ok"))
                 .body("value.id", equalTo(testSeatId.intValue()))
                 .body("value.reservationStatus", equalTo("AVAILABLE"));

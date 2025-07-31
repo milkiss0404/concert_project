@@ -4,7 +4,9 @@ import kr.hhplus.be.server.concert.application.dtos.ConcertFindRequest;
 import kr.hhplus.be.server.concert.domain.Concert;
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
 import kr.hhplus.be.server.concert.domain.ConcertStatus;
+import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
 import kr.hhplus.be.server.concert.repository.ConcertRepository;
+import kr.hhplus.be.server.concert.repository.entity.ConcertEntity;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,11 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("콘서트 서비스 테스트")
@@ -35,7 +37,8 @@ class ConcertServiceTest {
 
     @Mock
     private ConcertRepository concertRepository;
-
+    @Mock
+    private ConcertModelMapper concertModelMapper;
 
     @Test
     @DisplayName("콘서트 찾기")
@@ -46,7 +49,7 @@ class ConcertServiceTest {
 
 
         ConcertFindRequest request = new ConcertFindRequest(1L);
-        Concert dummyConcert = Concert.builder()
+        ConcertEntity dummyConcert = ConcertEntity.builder()
                 .id(1L)
                 .concertTitle("테스트 콘서트")
                 .concertSchedule(new ConcertSchedule(concertTime, concertDate ))
@@ -55,10 +58,19 @@ class ConcertServiceTest {
                 .description("설명")
                 .build();
 
-        Mockito.when(concertRepository.findById(1L)).thenReturn(dummyConcert);
+        Concert concertDomain = Concert.builder()
+                .id(1L)
+                .concertTitle("테스트 콘서트")
+                .concertSchedule(new ConcertSchedule(concertTime, concertDate ))
+                .artist("테스트 아티스트")
+                .concertStatus(ConcertStatus.SCHEDULED)
+                .description("설명")
+                .build();
+        when(concertRepository.findById(1L)).thenReturn((dummyConcert));
+        when(concertModelMapper.toDomain(dummyConcert)).thenReturn(concertDomain);
 
         // when
-        Concert result = concertService.findConcert(request);
+        Concert result = concertService.findConcert(request.concertId());
 
         // then
         assertThat(result).isNotNull();
