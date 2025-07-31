@@ -36,13 +36,4 @@ public class SeatEntity {
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus = ReservationStatus.AVAILABLE;
 
-    public Seat toSeat() {
-        return Seat.builder()
-                .id(id)
-                .zone(zone)
-                .seatRow(seatRow)
-                .seatNumber(seatNumber)
-                .reservationStatus(reservationStatus)
-                .build();
-    }
 }

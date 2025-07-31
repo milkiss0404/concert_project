@@ -25,5 +25,4 @@ public class ConcertEntity {
     @Lob
     private String description;
 
-
 }

@@ -16,21 +16,16 @@ public class Concert {
     private String description;
 
 
-    public static ConcertEntity toConcertEntity(Concert concert) {
-        return ConcertEntity.builder()
-                .id(concert.id)
-                .concertTitle(concert.concertTitle)
-                .concertSchedule(concert.concertSchedule)
-                .artist(concert.artist)
-                .concertStatus(concert.concertStatus)
-                .description(concert.description)
-                .build();
-    }
-
     public String getConcertDate() {
-        return concertSchedule.getConcertDateFormat();
+        if (concertSchedule == null) {
+            return null;
+        }
+            return concertSchedule.getConcertDateFormat();
     }
     public String getConcertTime() {
+        if (concertSchedule == null) {
+            return null;
+        }
         return concertSchedule.getConcertTimeString();
     }
     public void ongoing() {
