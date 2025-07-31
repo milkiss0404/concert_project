@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.queue.application.service;
 
-import kr.hhplus.be.server.queue.jwt.QueueTokenProvider;
+import kr.hhplus.be.server.queue.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,14 +13,14 @@ import java.util.Set;
 public class QueueScheduled {
 
     private final RedisTemplate<String, String> redisTemplate;
-    private final QueueTokenProvider queueTokenProvider;
+    private final JwtTokenProvider queueTokenProvider;
     private final QueueService queueService;
 
     private static final int MAX = 100;
     private static final String QUEUE_KEY_PREFIX = "concert:queue:";
     private static final String TOKEN_KEY_PREFIX = "queue:token:";
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 3000)
     public void allowEntranceIfValidToken(Long concertId) {
         String queueKey = QUEUE_KEY_PREFIX + concertId;
         Long currentQueueSize = redisTemplate.opsForList().size(queueKey);
