@@ -9,16 +9,43 @@ import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.SeatRepository;
 import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("SeatService 통합테스트")
 class SeatServiceTest extends CustomTestContainer {
+
+    @BeforeEach
+    void setUp() {
+        ConcertEntity concert = ConcertEntity.builder()
+                .concertTitle("Test Concert")
+                .build();
+        concertRepository.save(concert);
+
+        SeatEntity seat1 = SeatEntity.builder()
+                .concert(concert)
+                .zone(Zone.VIP)
+                .reservationStatus(ReservationStatus.AVAILABLE)
+                .build();
+        seatRepository.save(seat1);
+
+        SeatEntity seat2 = SeatEntity.builder()
+                .concert(concert)
+                .zone(Zone.S)
+                .reservationStatus(ReservationStatus.RESERVED)
+                .build();
+        seatRepository.save(seat2);
+    }
 
     @Autowired
     private SeatRepository seatRepository;
@@ -39,7 +66,7 @@ class SeatServiceTest extends CustomTestContainer {
         SeatEntity expectedSeat = SeatEntity.builder()
                 .concert(concert)
                 .seatNumber(1)
-                .zone(Zone.S)
+                .zone(Zone.VIP)
                 .reservationStatus(ReservationStatus.AVAILABLE)
                 .build();
 
@@ -54,5 +81,20 @@ class SeatServiceTest extends CustomTestContainer {
         // then
         assertNotNull(actualSeat);
         assertEquals(savedSeat.getId(), actualSeat.getId());
+    }
+
+    @Test
+    @DisplayName("콘서트 , Zone ,예약 상태별 좌석조회")
+    void testFindSeatsByZoneAndConcertIdAndStatus() {
+        ConcertEntity concert = concertRepository.findAll().get(0);
+        Long concertId = concert.getId();
+
+        List<Seat> seats = seatService.findSeatsByZoneAndConcertIdAndStatus(
+                concertId, Zone.VIP, ReservationStatus.AVAILABLE);
+
+        assertThat(seats).isNotEmpty();
+        assertThat(seats).allMatch(seat -> seat.getZone() == Zone.VIP);
+        assertThat(seats).allMatch(seat -> seat.getReservationStatus() == ReservationStatus.AVAILABLE);
+        assertThat(seats).allMatch(seat -> seat.getConcert().getId().equals(concertId));
     }
 }
