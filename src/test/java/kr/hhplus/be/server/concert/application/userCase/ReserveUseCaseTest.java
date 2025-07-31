@@ -113,7 +113,7 @@ class ReserveUseCaseTest {
             executor.submit(() -> {
                 try {
                     barrier.await();
-                    var seat = reserveUseCase.choiceSeatAndReserve(concertId, new ChoiceSeatRequest(userIds.get(userIndex), seatId));
+                    var seat = reserveUseCase.choiceSeatAndReserve(concertId, userIds.get(userIndex), seatId);
                     System.out.println("예약 성공: " + seat.getId() + " by user " + userIds.get(userIndex));
                 } catch (Throwable t) {
                     exceptions.add(t);
@@ -137,13 +137,12 @@ class ReserveUseCaseTest {
     @DisplayName("좌석예약_테스트_금액사용")
     void usingCash() {
         // given
-        Long userId = 1L;
-        UserEntity user = new UserEntity(userId,"유저명","1234",new Point(userId, 1000000));
-        jpaUserRepository.save(user);
+        UserEntity user = new UserEntity(null,"유저명","1234",new Point(1L, 1000000));
+        UserEntity saveUser = jpaUserRepository.save(user);
         // when
-        Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, new ChoiceSeatRequest(user.getId(), seatId));
+        Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, seatId, saveUser.getId());
         // then
-        Optional<UserEntity> byId = jpaUserRepository.findById(userId);
+        Optional<UserEntity> byId = jpaUserRepository.findById(saveUser.getId());
 
         assertThat(byId.get().getPoint()).isEqualTo(850000);
         assertThat(seat.getReservationStatus()).isEqualTo(ReservationStatus.RESERVED);
