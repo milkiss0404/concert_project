@@ -50,6 +50,9 @@ dependencies {
 	//redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+	//await
+	testImplementation ("org.awaitility:awaitility:4.2.0")
+
 	// JWT
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
