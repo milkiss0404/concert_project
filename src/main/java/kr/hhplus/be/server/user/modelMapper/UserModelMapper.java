@@ -23,7 +23,7 @@ public class UserModelMapper {
                 entity.getId(),
                 entity.getUsername(),
                 entity.getPassWd(),
-                new Point(entity.getId(), entity.getPoint())
+                new Point(entity.getPoint())
         );
     }
 }

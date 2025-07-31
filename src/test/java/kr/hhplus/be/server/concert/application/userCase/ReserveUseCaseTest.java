@@ -94,7 +94,7 @@ class ReserveUseCaseTest {
 
         userIds = new ArrayList<>();
         for (Long i = 1L; i < 100L; i++) {
-            UserEntity user = jpaUserRepository.save(new UserEntity(null,"유저명","1234",new Point(i, 1000000)));
+            UserEntity user = jpaUserRepository.save(new UserEntity(null,"유저명","1234",new Point(1000000)));
             userIds.add(user.getId());
         }
     }
@@ -137,7 +137,7 @@ class ReserveUseCaseTest {
     @DisplayName("좌석예약_테스트_금액사용")
     void usingCash() {
         // given
-        UserEntity user = new UserEntity(null,"유저명","1234",new Point(1L, 1000000));
+        UserEntity user = new UserEntity(null,"유저명","1234",new Point(1000000));
         UserEntity saveUser = jpaUserRepository.save(user);
         // when
         Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, seatId, saveUser.getId());

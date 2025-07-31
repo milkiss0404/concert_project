@@ -14,7 +14,7 @@ public record ChargingPointResponse(
                 user.getId(),
                 user.getUsername(),
                 user.getPassWd(),
-                new Point(user.getId(), user.getPoint())
+                new Point(user.getPoint())
         );
     }
 }
