@@ -1,23 +1,19 @@
 package kr.hhplus.be.server.queue.controller;
 
-import kr.hhplus.be.server.config.ui.Response;
-import org.junit.jupiter.api.BeforeEach;
+import kr.hhplus.be.server.config.CustomTestContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-@SpringBootTest
 @DisplayName("레디스 대기열 진입")
-class QueueControllerIntegrationTest {
+class QueueControllerTest extends CustomTestContainer {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -30,11 +26,6 @@ class QueueControllerIntegrationTest {
 
     private static final String QUEUE_KEY_PREFIX = "concert:queue:";
 
-    @BeforeEach
-    void cleanUp() {
-        // 테스트 전 Redis 초기화
-        redisTemplate.delete(QUEUE_KEY_PREFIX + concertId);
-    }
 
     @Test
     @DisplayName("대기열 진입 API 호출 시 대기열에 userId 추가 및 토큰 반환 테스트")
