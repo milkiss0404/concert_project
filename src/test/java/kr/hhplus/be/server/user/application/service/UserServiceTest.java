@@ -1,17 +1,24 @@
 package kr.hhplus.be.server.user.application.service;
 
+import kr.hhplus.be.server.config.CustomTestContainer;
 import kr.hhplus.be.server.user.application.dto.ChargingPointRequest;
 import kr.hhplus.be.server.user.domain.Point;
 import kr.hhplus.be.server.user.domain.User;
 import kr.hhplus.be.server.user.modelMapper.UserModelMapper;
 import kr.hhplus.be.server.user.repository.UserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.concurrent.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -103,5 +110,53 @@ class UserServiceTest {
 
         verify(userRepository).findById(userId);
         verify(modelMapper).toDomainBuilder(any(UserEntity.class));
+    }
+
+    @Nested
+    @DisplayName("비관적 락 + 동시성 포인트 사용 테스트")
+    class UserServiceTestContainer extends CustomTestContainer {
+        @Autowired
+        private UserRepository userRepository;
+
+        @Autowired
+        private UserService userService;
+
+        @Autowired
+        private UserModelMapper userModelMapper;
+
+        private User userDomain;
+
+        @BeforeEach
+        void setup() {
+            UserEntity userEntity = new UserEntity(new Point(30000));
+            userRepository.save(userEntity);
+            this.userDomain = userModelMapper.toDomain(userEntity);
+        }
+
+        @Test
+        void concurrencyUsingUserPoint() throws Exception {
+            int usePoint1 = 20000;
+            int usePoint2 = 15000;
+
+            ExecutorService executor = Executors.newFixedThreadPool(2);
+            Callable<Integer> task1 = () -> userService.usingUserPoint(userDomain, usePoint1).getPoint();
+            Callable<Integer> task2 = () -> userService.usingUserPoint(userDomain, usePoint2).getPoint();
+
+            Future<Integer> f1 = executor.submit(task1);
+            Future<Integer> f2 = executor.submit(task2);
+
+            int r1 = 0;
+            int r2 = 0;
+
+            try {
+                r1 = f1.get();
+                r2 = f2.get();
+            } catch (ExecutionException e) {
+                System.out.println("예외 발생: " + e.getCause().getMessage());
+            }
+
+            executor.shutdown();
+            assertThat(r1 + r2).isLessThanOrEqualTo(10000);
+        }
     }
 }

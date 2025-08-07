@@ -33,9 +33,8 @@ public class UserService {
     }
 
     public User usingUserPoint(User user,  int price) {
-        User changed = user.usePoint(price);
         UserEntity userEntity = userRepository.findByIdForLock(user);
-        userEntity.updatePoint(changed.getPoint());
-        return changed;
+        userEntity.usingPoint(price);
+        return userModelMapper.toDomain(userEntity);
     }
 }
