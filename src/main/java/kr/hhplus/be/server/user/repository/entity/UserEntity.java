@@ -35,9 +35,14 @@ public class UserEntity {
     }
 
     public int usingPoint(int point) {
+        int currentPoint = this.point.getPoint();
+
         if (point <= 0) {
             throw new IllegalArgumentException("사용금액은 0보다 커야합니다");
         }
-        return this.point.getPoint() - point;
+        if (currentPoint < point) {
+            throw new IllegalArgumentException("포인트가 부족합니다");
+        }
+       return (this.point = new Point(currentPoint - point)).getPoint();
     }
 }
