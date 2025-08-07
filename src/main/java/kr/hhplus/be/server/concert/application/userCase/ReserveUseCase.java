@@ -37,25 +37,18 @@ public class ReserveUseCase {
     private final ConcertService concertService;
     private final SeatService seatService;
     private final SeatRepository seatRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
 
-    private final UserModelMapper userModelMapper;
     private final SeatModelMapper seatModelMapper;
 
     public Seat choiceSeatAndReserve(Long concertId, Long seatId,Long userId) {
             Concert concert = concertService.findConcert((concertId));
-
-            SeatEntity seatEntity = seatRepository.seatInfo(concertId, seatId);
-            Seat seat = seatModelMapper.toDomain(seatEntity);
-
-
-            UserEntity userEntity = userRepository.findById(userId);
-            User user = userModelMapper.toDomain(userEntity);
+            Seat seat = seatService.seatInfo(concertId, seatId);
+            User user = userService.findById(userId);
 
             Reservation reservation = Reservation.create(user, seat, concert);
 
-            userService.usingUserPoint(new UsingUserPointRequest(user.getId(), seat.getSeatPrice()));
+            userService.usingUserPoint(user,seat.getSeatPrice());
 
             reservationService.reserve(reservation);
 

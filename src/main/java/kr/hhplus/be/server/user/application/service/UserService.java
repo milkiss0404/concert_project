@@ -15,23 +15,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final UserModelMapper modelMapper;
+    private final UserModelMapper userModelMapper;
+
+
+    public User findById(Long userId) {
+        UserEntity byId = userRepository.findById(userId);
+        return userModelMapper.toDomain(byId);
+    }
 
     public User chargingPoint(ChargingPointRequest request) {
         UserEntity entity = userRepository.findById(request.userId());
-        User user = modelMapper.toDomainBuilder(entity);
+        User user = userModelMapper.toDomainBuilder(entity);
         User changed = user.chargePoint(request.amount());
 
         entity.updatePoint(changed.getPoint());
         return changed;
     }
 
-    public User usingUserPoint(UsingUserPointRequest request) {
-        UserEntity entity = userRepository.findById(request.userId());
-        User user = modelMapper.toDomainBuilder(entity);
-        User changed = user.usePoint(request.amount());
-
-        entity.updatePoint(changed.getPoint());
-        return changed;
+    public User usingUserPoint(User user,  int price) {
+        UserEntity userEntity = userRepository.findByIdForLock(user);
+        userEntity.usingPoint(price);
+        return userModelMapper.toDomain(userEntity);
     }
 }

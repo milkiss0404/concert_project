@@ -2,6 +2,7 @@ package kr.hhplus.be.server.concert.application.userCase;
 
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
 import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
+import kr.hhplus.be.server.config.CustomTestContainer;
 import kr.hhplus.be.server.user.domain.Point;
 import kr.hhplus.be.server.user.repository.JpaUserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
@@ -32,10 +33,9 @@ import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
 @DisplayName("예약 E2E 테스트")
 @Nested
-class ReserveUseCaseTest {
+class ReserveUseCaseTest extends CustomTestContainer {
 
     @Autowired
     private ReserveUseCase  reserveUseCase;
