@@ -23,6 +23,7 @@ import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.repository.SeatRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ import java.util.logging.Level;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
+@Log4j2
 public class ReserveUseCase {
     private final ReservationService reservationService;
     private final ConcertService concertService;
@@ -41,20 +42,46 @@ public class ReserveUseCase {
 
     private final SeatModelMapper seatModelMapper;
 
-    public Seat choiceSeatAndReserve(Long concertId, Long seatId,Long userId) {
+    public Seat choiceSeatAndReserve(Long concertId, Long seatId, Long userId) {
+        Seat seat = null;
+        boolean pointDeducted = false;
+        try {
             Concert concert = concertService.findConcert((concertId));
-            Seat seat = seatService.seatInfo(concertId, seatId);
+            seat = seatService.seatInfo(concertId, seatId);
             User user = userService.findById(userId);
 
+            //예약처리
             Reservation reservation = Reservation.create(user, seat, concert);
 
-            userService.usingUserPoint(user,seat.getSeatPrice());
+            userService.usingUserPoint(user, seat.getSeatPrice());
+            pointDeducted = true;
 
             reservationService.reserve(reservation);
 
             seat.reserveStatus();
             seatRepository.save(seatModelMapper.toEntity(seat));
+
             return seat;
+        } catch (Exception e) {
+            compensateReservation(pointDeducted, seat, userId);
+            throw new RuntimeException("예약 중 오류 발생", e);
+        }
+    }
+
+    private void compensateReservation(boolean pointDeducted, Seat seat, Long userId) {
+        if (pointDeducted) {
+            try {
+                userService.refundUserPoint(userId, seat.getSeatPrice());
+            } catch (Exception ex) {
+                log.error("포인트 환불 실패", ex);
+            }
+        }
+        if (seat != null) {
+            try {
+                seatService.cancelSeatReservation(seat);
+            } catch (Exception ex) {
+                log.error("좌석 취소 실패", ex);
+            }
+        }
     }
 }
-

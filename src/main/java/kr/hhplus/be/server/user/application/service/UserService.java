@@ -37,4 +37,9 @@ public class UserService {
         userEntity.usingPoint(price);
         return userModelMapper.toDomain(userEntity);
     }
+
+    public void refundUserPoint(Long userId, int seatPrice) {
+        UserEntity user = userRepository.findById(userId);
+        user.updatePoint(user.getPoint()+ seatPrice);
+    }
 }

@@ -36,6 +36,9 @@ public class Seat {
     }
 
     public void cancelStatus() {
-        this.reservationStatus = ReservationStatus.CANCELLED;
+        if (this.reservationStatus == ReservationStatus.AVAILABLE) {
+            throw new IllegalStateException("이미 예약 취소된 좌석입니다.");
+        }
+        this.reservationStatus = ReservationStatus.AVAILABLE;
     }
 }

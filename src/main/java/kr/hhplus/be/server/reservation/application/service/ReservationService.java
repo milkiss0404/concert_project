@@ -17,6 +17,6 @@ public class ReservationService {
     private final ReservationModelMapper reservationModelMapper;
 
     public void reserve(Reservation reservation) {
-        reservationRepository.reserve(reservationModelMapper.toEntity(reservation));
+        reservationRepository.save(reservationModelMapper.toEntity(reservation));
     }
 }
