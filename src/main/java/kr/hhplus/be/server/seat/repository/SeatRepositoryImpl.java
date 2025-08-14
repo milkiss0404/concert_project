@@ -22,6 +22,9 @@ public class SeatRepositoryImpl implements SeatRepository {
         SeatEntity seatEntity = jpaSeatRepository.findById(seatId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 좌석이 존재하지 않습니다."));
 
+        if(seatEntity.getReservationStatus() == ReservationStatus.RESERVED){
+            throw new RuntimeException("이미 예약됨");
+        }
         if (!seatEntity.getConcert().getId().equals(concertId)) {
             throw new IllegalArgumentException("좌석이 해당 콘서트에 속하지 않습니다.");
         }

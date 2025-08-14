@@ -5,6 +5,7 @@ import kr.hhplus.be.server.concert.application.dtos.ConcertSeatInfoRequest;
 import kr.hhplus.be.server.concert.application.service.ConcertService;
 import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
 import kr.hhplus.be.server.concert.repository.entity.ConcertEntity;
+import kr.hhplus.be.server.queue.redis.DistributedLock;
 import kr.hhplus.be.server.reservation.application.service.ReservationService;
 import kr.hhplus.be.server.reservation.domain.Reservation;
 import kr.hhplus.be.server.seat.application.service.SeatService;
@@ -42,6 +43,8 @@ public class ReserveUseCase {
 
     private final SeatModelMapper seatModelMapper;
 
+    @DistributedLock(key = "'concert:' + #concertId + ':seat:' + #seatId")
+    @Transactional
     public Seat choiceSeatAndReserve(Long concertId, Long seatId, Long userId) {
         Seat seat = null;
         boolean pointDeducted = false;

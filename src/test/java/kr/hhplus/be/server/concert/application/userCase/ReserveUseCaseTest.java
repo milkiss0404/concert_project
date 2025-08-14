@@ -17,10 +17,9 @@ import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.JpaSeatRepository;
 import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.jupiter.api.*;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,6 +31,7 @@ import java.util.Optional;
 import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.*;
 
 @DisplayName("예약 E2E 테스트")
 @Nested
@@ -148,4 +148,32 @@ class ReserveUseCaseTest extends CustomTestContainer {
         assertThat(seat.getReservationStatus()).isEqualTo(ReservationStatus.RESERVED);
     }
 
+    @DisplayName("동시에 5명이 예약 시도 하고 한명만 예약성공하는 Redision test")
+    @Test
+    void testDistributedLock() throws InterruptedException {
+        int threadCount = 5; // 동시에 5명이 예약 시도
+        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        CyclicBarrier barrier = new CyclicBarrier(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        Long userIdStart = 1000L;
+
+        for (int i = 0; i < threadCount; i++) {
+            final int userIndex = i;
+            executor.submit(() -> {
+                try {
+                    barrier.await();  // 모든 스레드 동시 시작
+                    Seat seat = reserveUseCase.choiceSeatAndReserve(concertId, seatId, userIds.get(userIndex));
+                    Assertions.assertNotNull(seat);
+                    System.out.println("예약 성공: userId=" + userIds.get(userIndex));
+                } catch (Exception e) {
+                    System.out.println("예약 실패: userId=" + userIds.get(userIndex) + " -> " + e.getMessage());
+                } finally {
+                    latch.countDown();// main thread 가 모든 스레드 끝날 때까지 대기
+                }
+            });
+        }
+        executor.shutdown();
+        executor.awaitTermination(10, TimeUnit.SECONDS);
+    }
 }
