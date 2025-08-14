@@ -18,7 +18,9 @@ java {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
-
+tasks.withType<JavaCompile> {
+	options.compilerArgs.add("-parameters")
+}
 repositories {
 	mavenCentral()
 }
@@ -49,6 +51,7 @@ dependencies {
 
 	//redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.redisson:redisson:3.50.0")
 
 	//await
 	testImplementation ("org.awaitility:awaitility:4.2.0")
