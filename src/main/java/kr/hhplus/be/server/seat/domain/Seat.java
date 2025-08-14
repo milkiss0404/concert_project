@@ -36,6 +36,6 @@ public class Seat {
     }
 
     public void cancelStatus() {
-        this.reservationStatus = ReservationStatus.CANCELLED;
+        this.reservationStatus = ReservationStatus.AVAILABLE;
     }
 }

@@ -7,5 +7,5 @@ import kr.hhplus.be.server.concert.domain.Concert;
 import kr.hhplus.be.server.seat.domain.Seat;
 
 public interface ReservationRepository {
-    ReservationEntity reserve(ReservationEntity reservationEntity);
+    void save(ReservationEntity entity);
 }
