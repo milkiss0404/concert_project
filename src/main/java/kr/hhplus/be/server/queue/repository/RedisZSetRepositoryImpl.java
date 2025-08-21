@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -18,7 +21,6 @@ public class RedisZSetRepositoryImpl implements RedisZSetRepository{
 
     private static final String TOKEN_KEY_PREFIX = "queue:token:";
     private final StringRedisTemplate redisTemplate;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public Long getQueueSize(Long concertId) {
@@ -76,5 +78,19 @@ public class RedisZSetRepositoryImpl implements RedisZSetRepository{
     @Override
     public void endConcert(Long concertId) {
         redisTemplate.opsForSet().remove("activeConcerts", concertId.toString());
+    }
+
+    @Override
+    public List<String> getTopConcerts(int topN) {
+        // score 기준 내림차순으로 상위 N개
+        Set<String> topConcerts = redisTemplate.opsForZSet().reverseRange("concertRanking", 0, topN - 1);
+        if (topConcerts == null) return Collections.emptyList();
+        return new ArrayList<>(topConcerts);
+    }
+    @Override
+    public Long getConcertRank(Long concertId) {
+        // 내림차순 랭킹
+        Long rank = redisTemplate.opsForZSet().reverseRank("concertRanking", String.valueOf(concertId));
+        return rank != null ? rank + 1 : null; // 0부터 시작하므로 +1
     }
 }

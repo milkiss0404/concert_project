@@ -26,6 +26,7 @@ import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,7 @@ public class ReserveUseCase {
     private final SeatService seatService;
     private final SeatRepository seatRepository;
     private final UserService userService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private final SeatModelMapper seatModelMapper;
 
@@ -63,6 +65,8 @@ public class ReserveUseCase {
 
             seat.reserveStatus();
             seatRepository.save(seatModelMapper.toEntity(seat));
+            // 공연 예약 완료 수 증가
+            redisTemplate.opsForZSet().incrementScore("concertRanking", String.valueOf(concertId), 1);
 
             return seat;
         } catch (Exception e) {

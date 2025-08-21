@@ -6,10 +6,9 @@ import kr.hhplus.be.server.queue.repository.QueueRepository;
 import kr.hhplus.be.server.queue.repository.RedisZSetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +49,11 @@ public class ZSetQueueController {
     public Response<?> counterReset(@PathVariable Long concertId){
         redisZSetRepository.RefreshCounter(concertId);
         return Response.ok(null);
+    }
+
+    @GetMapping("/concert/ranking/{topN}")
+    public Response<List<String>> concertRanking(@PathVariable int topN) {
+        List<String> topConcerts = redisZSetRepository.getTopConcerts(topN);
+        return Response.ok(topConcerts);
     }
 }
