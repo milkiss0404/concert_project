@@ -2,6 +2,7 @@ package kr.hhplus.be.server.queue.repository;
 
 import org.springframework.data.redis.core.ZSetOperations;
 
+import java.util.List;
 import java.util.Set;
 
 public interface RedisZSetRepository {
@@ -26,4 +27,8 @@ public interface RedisZSetRepository {
     void startConcert(Long concertId);
 
     void endConcert(Long concertId);
+
+    List<String> getTopConcerts(int topN);
+
+    Long getConcertRank(Long concertId);
 }
