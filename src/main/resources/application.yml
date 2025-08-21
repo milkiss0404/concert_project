@@ -34,7 +34,15 @@ spring:
     properties:
       hibernate.timezone.default_storage: NORMALIZE_UTC
       hibernate.jdbc.time_zone: UTC
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 jwt:
   secret: dsalkewqooeowique_dsadiosanmdsanm_djsakldjlksajdlk_duwuwudnksma
