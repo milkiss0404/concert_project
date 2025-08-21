@@ -14,7 +14,6 @@ public class QueueScheduled {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final JwtTokenProvider queueTokenProvider;
-    private final QueueService queueService;
 
     private static final int MAX = 100;
     private static final String QUEUE_KEY_PREFIX = "concert:queue:";
