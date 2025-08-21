@@ -23,10 +23,15 @@ public class SeatController {
         return Response.ok(seatsByZoneAndConcertIdAndStatus);
     }
 
-    @GetMapping("/on-cache/{seatId}/concertId/{concertId}")
     @Cacheable(cacheNames = "seat", key = "'concert:' + #concertId + 'seat:' + #seatId")
-    public Seat getSeat(@PathVariable Long concertId, @PathVariable Long seatId) {
+    public Seat getSeatFromCache(Long concertId, Long seatId) {
         return seatService.seatInfo(concertId, seatId);
+    }
+
+    @GetMapping("/on-cache/{seatId}/concertId/{concertId}")
+    public Response<Seat> getSeat(@PathVariable Long concertId, @PathVariable Long seatId) {
+        Seat seat = getSeatFromCache(concertId, seatId);
+        return Response.ok(seat);
     }
 
     @GetMapping("/off-cache/{seatId}/concertId/{concertId}")
