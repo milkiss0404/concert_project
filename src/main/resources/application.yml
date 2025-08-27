@@ -15,11 +15,11 @@ spring:
       idle-timeout: 10000
       connection-timeout: 30000
       max-lifetime: 300000
+  aop:
+    proxy-target-class: true
 
   data:
       redis:
-        host: 127.0.0.1
-        port: 6379
         database: 0
         timeout: 60000
         connect-timeout: 60000
@@ -32,7 +32,15 @@ spring:
     properties:
       hibernate.timezone.default_storage: NORMALIZE_UTC
       hibernate.jdbc.time_zone: UTC
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 jwt:
   secret: dsalkewqooeowique_dsadiosanmdsanm_djsakldjlksajdlk_duwuwudnksma

@@ -18,7 +18,9 @@ java {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
-
+tasks.withType<JavaCompile> {
+	options.compilerArgs.add("-parameters")
+}
 repositories {
 	mavenCentral()
 }
@@ -49,6 +51,7 @@ dependencies {
 
 	//redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.redisson:redisson:3.50.0")
 
 	//await
 	testImplementation ("org.awaitility:awaitility:4.2.0")
@@ -62,6 +65,11 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 	implementation ("org.modelmapper:modelmapper:3.1.1")
+
+
+	//prometheus
+	implementation ("org.springframework.boot:spring-boot-starter-actuator")
+	implementation ("io.micrometer:micrometer-registry-prometheus")
 }
 
 tasks.withType<Test> {

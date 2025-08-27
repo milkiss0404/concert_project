@@ -15,7 +15,12 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     private final JpaReservationRepository jpaReservationRepository;
 
     @Override
-    public ReservationEntity reserve(ReservationEntity reservationEntity) {
-        return jpaReservationRepository.save(reservationEntity);
+    public void save(ReservationEntity reservationEntity) {
+        jpaReservationRepository.save(reservationEntity);
+    }
+
+    @Override
+    public ReservationEntity findById(Long id) {
+        return jpaReservationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("찾을수없는 예약정보"));
     }
 }

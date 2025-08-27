@@ -8,6 +8,7 @@ import kr.hhplus.be.server.user.repository.UserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -32,9 +33,15 @@ public class UserService {
         return changed;
     }
 
+
     public User usingUserPoint(User user,  int price) {
         UserEntity userEntity = userRepository.findByIdForLock(user);
         userEntity.usingPoint(price);
         return userModelMapper.toDomain(userEntity);
+    }
+
+    public void refundUserPoint(Long userId, int seatPrice) {
+        UserEntity user = userRepository.findById(userId);
+        user.updatePoint(user.getPoint()+ seatPrice);
     }
 }

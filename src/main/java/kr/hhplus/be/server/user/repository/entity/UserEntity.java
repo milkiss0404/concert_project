@@ -22,6 +22,9 @@ public class UserEntity {
     @Embedded
     private Point point;
 
+    public UserEntity(Long l, String userId) {
+    }
+
     public void updatePoint(int point) {
         this.point = new Point(point);
     }

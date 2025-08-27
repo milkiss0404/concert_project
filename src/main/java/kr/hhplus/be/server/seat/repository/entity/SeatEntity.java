@@ -3,7 +3,6 @@ package kr.hhplus.be.server.seat.repository.entity;
 import jakarta.persistence.*;
 import kr.hhplus.be.server.concert.repository.entity.ConcertEntity;
 import kr.hhplus.be.server.seat.domain.ReservationStatus;
-import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.domain.Zone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,4 +38,6 @@ public class SeatEntity {
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus = ReservationStatus.AVAILABLE;
 
+    public SeatEntity(Long l, String a1) {
+    }
 }

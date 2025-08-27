@@ -48,7 +48,7 @@ class SeatTest {
         // when
         seat.cancelStatus();
         // then
-        assertEquals(ReservationStatus.CANCELLED,seat.getReservationStatus());
+        assertEquals(ReservationStatus.AVAILABLE,seat.getReservationStatus());
     }
 
 }

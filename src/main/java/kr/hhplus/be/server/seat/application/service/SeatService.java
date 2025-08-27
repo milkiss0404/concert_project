@@ -36,4 +36,9 @@ public class SeatService {
         List<SeatEntity> seatsByZoneAndConcertIdAndStatus = seatRepository.findSeatsByZoneAndConcertIdAndStatus(concertId, zone, status);
         return  seatsByZoneAndConcertIdAndStatus.stream().map(seatModelMapper::toDomain).toList();
     }
+
+    public void cancelSeatReservation(Seat seat) {
+        seat.cancelStatus();
+        seatRepository.save(seatModelMapper.toEntity(seat));
+    }
 }
