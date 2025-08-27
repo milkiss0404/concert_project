@@ -22,6 +22,7 @@ import org.junit.jupiter.api.*;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,6 +55,9 @@ class ReserveUseCaseTest extends CustomTestContainer {
 
     @Autowired
     private ConcertModelMapper concertModelMapper;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     private Long concertId;
     private Long seatId;
@@ -146,6 +150,18 @@ class ReserveUseCaseTest extends CustomTestContainer {
 
         assertThat(byId.get().getPoint()).isEqualTo(850000);
         assertThat(seat.getReservationStatus()).isEqualTo(ReservationStatus.RESERVED);
+    }
+
+    @Test
+    @DisplayName("좌석예약_테스트_콘서트 랭킹 + 1 ")
+    void concertCountUp() {
+        // given
+        UserEntity user = new UserEntity(null,"유저명","1234",new Point(1000000));
+        UserEntity saveUser = jpaUserRepository.save(user);
+        // when
+        reserveUseCase.choiceSeatAndReserve(concertId, seatId, saveUser.getId());
+        // then
+        assertThat(redisTemplate.opsForZSet().zCard("concertRanking")).isEqualTo(1);
     }
 
     @DisplayName("동시에 5명이 예약 시도 하고 한명만 예약성공하는 Redision test")
