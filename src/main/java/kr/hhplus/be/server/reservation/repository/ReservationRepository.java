@@ -8,4 +8,6 @@ import kr.hhplus.be.server.seat.domain.Seat;
 
 public interface ReservationRepository {
     void save(ReservationEntity entity);
+
+    ReservationEntity findById(Long id);
 }

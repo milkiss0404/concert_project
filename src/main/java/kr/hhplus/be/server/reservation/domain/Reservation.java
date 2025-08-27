@@ -52,9 +52,16 @@ public class Reservation {
         this.canceledAt = LocalDateTime.now();
     }
 
+    public int getSeatPrice() {
+        return seat.getSeatPrice();
+    }
+
     // 예약 상태 체크
     public boolean isReserved() {
         return this.status == ReservationStatus.RESERVED;
     }
 
+    public Long getConcertId() {
+        return concert.getId();
+    }
 }

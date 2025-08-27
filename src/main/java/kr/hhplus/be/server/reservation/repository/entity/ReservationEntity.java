@@ -44,4 +44,8 @@ public class ReservationEntity {
     @Column(name = "canceled_at")
     private LocalDateTime canceledAt;
 
+    public void cancel() {
+        this.status = ReservationStatus.CANCELLED;
+    }
+
 }
