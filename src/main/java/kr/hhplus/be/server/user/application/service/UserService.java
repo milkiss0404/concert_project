@@ -8,6 +8,7 @@ import kr.hhplus.be.server.user.repository.UserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -31,6 +32,7 @@ public class UserService {
         entity.updatePoint(changed.getPoint());
         return changed;
     }
+
 
     public User usingUserPoint(User user,  int price) {
         UserEntity userEntity = userRepository.findByIdForLock(user);
