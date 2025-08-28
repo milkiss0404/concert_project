@@ -20,6 +20,8 @@ spring:
 
   data:
       redis:
+        host: localhost   # 또는 Redis 서버 주소
+        port: 6379
         database: 0
         timeout: 60000
         connect-timeout: 60000

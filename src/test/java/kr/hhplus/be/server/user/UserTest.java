@@ -1,5 +1,7 @@
-package kr.hhplus.be.server.user.domain;
+package kr.hhplus.be.server.user;
 
+import kr.hhplus.be.server.user.domain.Point;
+import kr.hhplus.be.server.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
