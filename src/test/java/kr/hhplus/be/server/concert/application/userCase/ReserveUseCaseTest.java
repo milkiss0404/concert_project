@@ -3,10 +3,10 @@ package kr.hhplus.be.server.concert.application.userCase;
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
 import kr.hhplus.be.server.concert.modelMapper.ConcertModelMapper;
 import kr.hhplus.be.server.config.CustomTestContainer;
+import kr.hhplus.be.server.reservation.application.userCase.ReserveUseCase;
 import kr.hhplus.be.server.user.domain.Point;
 import kr.hhplus.be.server.user.repository.JpaUserRepository;
 import kr.hhplus.be.server.user.repository.entity.UserEntity;
-import kr.hhplus.be.server.concert.application.dtos.ChoiceSeatRequest;
 import kr.hhplus.be.server.concert.domain.Concert;
 import kr.hhplus.be.server.concert.repository.JpaConcertRepository;
 import kr.hhplus.be.server.concert.repository.entity.ConcertEntity;
@@ -17,11 +17,8 @@ import kr.hhplus.be.server.seat.domain.Seat;
 import kr.hhplus.be.server.seat.domain.Zone;
 import kr.hhplus.be.server.seat.repository.JpaSeatRepository;
 import kr.hhplus.be.server.seat.repository.entity.SeatEntity;
-import org.junit.Assert;
 import org.junit.jupiter.api.*;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.LocalDate;
@@ -32,14 +29,13 @@ import java.util.Optional;
 import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
 
 @DisplayName("예약 E2E 테스트")
 @Nested
 class ReserveUseCaseTest extends CustomTestContainer {
 
     @Autowired
-    private ReserveUseCase  reserveUseCase;
+    private ReserveUseCase reserveUseCase;
 
     @Autowired
     private JpaConcertRepository jpaConcertRepository;

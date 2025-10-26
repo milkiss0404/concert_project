@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.concert.application.userCase;
+package kr.hhplus.be.server.reservation.application.userCase;
 
 import kr.hhplus.be.server.concert.application.dtos.ConcertFindRequest;
 import kr.hhplus.be.server.concert.application.dtos.ConcertRankingCounterEvent;
@@ -31,58 +31,35 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.logging.Level;
 
-@Component
+@Service
 @RequiredArgsConstructor
 @Log4j2
+@Transactional
 public class ReserveUseCase {
     private final ReservationService reservationService;
     private final ConcertService concertService;
     private final SeatService seatService;
     private final UserService userService;
 
-    //UseCase 의 본래 목적에 맞는 핵심 로직은 직접 처리, 그 외 관심사는 이벤트로 분리
-    @DistributedLock(key = "'concert:' + #concertId + ':seat:' + #seatId")
     public Seat choiceSeatAndReserve(Long concertId, Long seatId, Long userId) {
-        Seat seat = null;
-        boolean pointDeducted = false;
-        try {
-            Concert concert = concertService.findConcert((concertId));
-            seat = seatService.seatInfo(concertId, seatId);
-            User user = userService.findById(userId);
+        // 1. 필요한 정보 조회
+        Concert concert = concertService.findConcert(concertId);
+        Seat seat = seatService.seatInfo(concertId, seatId);
+        User user = userService.findById(userId);
 
-            //예약처리
-            seatService.save(seat);
+        // 2. 도메인 로직 호출 및 상태 변경
+        seat.reserveStatus(); // 좌석 도메인 객체 상태 변경
+        Seat updatedSeat = seatService.save(seat); // 좌석 상태 저장
 
-            Reservation reservation = Reservation.create(user, seat, concert);
-            reservationService.reserve(reservation);
+        // 3. 예약 생성 및 처리 (포인트 차감 등)
+        Reservation reservation = Reservation.create(user, updatedSeat, concert);
+        reservationService.reserve(reservation); // 예약 정보 저장, 포인트 차감 (ReservationService 책임)
 
-            pointDeducted = true;
-
-            return seat;
-        } catch (Exception e) {
-            compensateReservation(pointDeducted, seat, userId);
-            throw new RuntimeException("예약 중 오류 발생", e);
-        }
-    }
-
-    private void compensateReservation(boolean pointDeducted, Seat seat, Long userId) {
-        if (pointDeducted) {
-            try {
-                userService.refundUserPoint(userId, seat.getSeatPrice());
-            } catch (Exception ex) {
-                log.error("포인트 환불 실패", ex);
-            }
-        }
-        if (seat != null) {
-            try {
-                seatService.cancelSeatReservation(seat);
-            } catch (Exception ex) {
-                log.error("좌석 취소 실패", ex);
-            }
-        }
+        return updatedSeat;
     }
 }
