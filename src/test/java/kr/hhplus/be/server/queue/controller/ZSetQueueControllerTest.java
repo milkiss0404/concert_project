@@ -1,8 +1,6 @@
 package kr.hhplus.be.server.queue.controller;
 
-import kr.hhplus.be.server.concert.application.service.ConcertService;
-import kr.hhplus.be.server.concert.application.userCase.ReserveUseCase;
-import kr.hhplus.be.server.concert.domain.Concert;
+import kr.hhplus.be.server.reservation.application.userCase.ReserveUseCase;
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
 import kr.hhplus.be.server.concert.domain.ConcertStatus;
 import kr.hhplus.be.server.concert.repository.JpaConcertRepository;
@@ -18,23 +16,15 @@ import kr.hhplus.be.server.user.repository.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;

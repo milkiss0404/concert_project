@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class SeatService {
     private final SeatRepository seatRepository;
     private final SeatModelMapper seatModelMapper;
